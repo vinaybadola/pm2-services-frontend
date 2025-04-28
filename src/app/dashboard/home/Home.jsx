@@ -66,6 +66,10 @@ export default function Pm2Dashboard() {
       })
 
       if (!res.ok) {
+        if(res.status === 401){
+          router.push("/")
+          return;
+        }
         throw new Error(`Failed to fetch processes: ${res.status} ${res.statusText}`)
       }
 
@@ -329,6 +333,12 @@ export default function Pm2Dashboard() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
+                <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                  S.No.
+                  </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -394,11 +404,12 @@ export default function Pm2Dashboard() {
                     </td>
                   </tr>
                 ) : (
-                  processes.map((proc) => (
+                  processes.map((proc, index) => (
                     <tr
                       key={proc.uuid || `${proc.name}-${proc.process_id}`}
                       className="hover:bg-gray-50 transition-colors"
                     >
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{proc.process_id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{proc.name}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{proc.port || "N/A"}</td>
